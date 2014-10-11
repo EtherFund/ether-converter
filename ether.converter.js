@@ -90,6 +90,11 @@ function validate() {
 		$("#input-value-wrap").addClass("has-error");
 		return null;
 	}
+	if(val.length > 14) {
+		$("#input-value-wrap").addClass("has-error");
+		return null;
+	}
+	
 	var unit = $("#btn-unit").val();
 	return {value:parseFloat(val), unit:unit};
 }
