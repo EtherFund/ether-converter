@@ -70,6 +70,9 @@ function validate() {
 	if(!input) {
 		return input;
 	}
+	
+	input['value']['hash'] = ['v','u'];
+	//console.log(input);
 	setHashParams(input, false);
 	return input;
 }
@@ -83,8 +86,13 @@ function convert(input) {
 	var input = input['value'];
 	
 	$(".in-value").html(input.value);
-	$(".in-unit").html(input.unit);
+	$(".in-unit").html(input.unit+" =");
 	$(".input-group").removeClass("has-success");
+	
+	$('#etherHelp').attr('title', input.unit+" to ether denominations");
+	$('#btcHelp').attr('title', input.unit+" to Bitcoin/USD$");
+	$('.etherHelp').tooltip('destroy');
+	$('.etherHelp').tooltip({placement:'top'});
 	
 	
 	// if input is an ETH unit:
