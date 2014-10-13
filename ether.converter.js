@@ -5,34 +5,22 @@
 - by @jrbedard
 */
 
-// Ethereum ether genesis sale, 1 BTC = 2000 ETH
-var SALE_PRICE = 2000.0;
-
-var btcprice = 0.0;
-
 
 
 // Init
 $(function () {
-	//$('.input-group-addon').tooltip({container:'body'});
-	var hash = document.location.hash
+	var hash = document.location.hash;
 	if(hash) {
 		var params = getHashParams();
-		$("#input-value").val(params['v']);
-		$("#btn-unit").val(params['u']);
-		$("#btn-unit").html(params['u']+" <span class='caret'></span>");
-		$("#in-"+params['u']).addClass("active");
+		setEtherInput('value', params['v'], params['u']); // from URL hash
 	} else {
-		$("#input-value").val(1);
-		$("#btn-unit").val("ether");
-		$("#btn-unit").html("ether <span class='caret'></span>");
-		$("#in-ether").addClass("active");
+		setEtherInput('value', 1, 'ether'); // default input
 	}
 	
+	$("#input-value").focus();
+	
 	// Get Bitcoin price
-	$.get('/api/btc_price', function(data) {
-		btcprice = data.toFixed(2);
-		
+	getBTCprice( function(btcprice) {
 		$(".btcprice").text(btcprice);
 		$("#out-usd .input-group-addon").attr('title', "1 Bitcoin = "+btcprice+" $USD");
 		
@@ -46,57 +34,44 @@ $(function () {
 
 
 
-// Selected unit
-$("#dropdown-unit li a").click(function() {
- 	var unit = $(this).text();
-	var unitBtn = $(this).parents('.input-group').find('.dropdown-toggle');
-	unitBtn.html(unit+" <span class='caret'></span>");
-	unitBtn.val(unit);
-	
-	$("#dropdown-unit li").removeClass("active");
-	$("#in-"+unit).addClass("active");
+// Changed value
+$("#input-value").bind("change paste keyup", function() {
+   $('#go-btn').click(); return true;
 });
 
+// Selected unit
+$("#dropdown-value li a").click(function() {
+	setEtherInput('value', null, $(this).text()); // todo: use val, not text...
+	$("#input-value").focus();
+	$('#go-btn').click(); return false;
+});
 
+// Pressed Enter
+$('#input-value, #btn-value, #go-btn').keypress(function (e) {
+	var key = e.which;
+	if(key == 13) {
+		$('#go-btn').click(); return false;
+	}
+});
 
 // Clicked GO
 $("#go-btn").click(function() {
 	var input = validate();
 	if(input) {
 		convert(input);
-		document.location.hash = "v="+input.value+'&u='+input.unit; // change arguments
-		$("#input-value-wrap").removeClass("has-error");
 	}
 });
-
-// Pressed Enter
-$('#input-value, #btn-unit, #go-btn').keypress(function (e) {
-	var key = e.which;
-	if(key == 13) {
-		$('#go-btn').click();
-		return false;
-	}
-});   
-
 
 
 
 // Validate
 function validate() {
-	var val = $("#input-value").val();
-	if(val=="") {
-		val = $("#input-value").attr('placeholder');
-	} else if(isNaN(val)) {
-		$("#input-value-wrap").addClass("has-error");
-		return null;
+	var input = validateEtherInput(['value']);
+	if(!input) {
+		return input;
 	}
-	if(val.length > 14) {
-		$("#input-value-wrap").addClass("has-error");
-		return null;
-	}
-	
-	var unit = $("#btn-unit").val();
-	return {value:parseFloat(val), unit:unit};
+	setHashParams(input, false);
+	return input;
 }
 
 
@@ -104,6 +79,8 @@ function validate() {
 // Convert
 function convert(input) {
 	if(!input) { return; }
+	//console.log(input);
+	var input = input['value'];
 	
 	$(".in-value").html(input.value);
 	$(".in-unit").html(input.unit);
