@@ -70,6 +70,7 @@ function validate() {
 	if(!input) {
 		return input;
 	}
+	//toggleCommas(true);
 	
 	input['value']['hash'] = ['v','u'];
 	//console.log(input);
@@ -89,8 +90,8 @@ function convert(input) {
 	$(".in-unit").html(input.unit+" =");
 	$(".input-group").removeClass("has-success");
 	
-	$('#etherHelp').attr('title', input.unit+" to ether denominations");
-	$('#btcHelp').attr('title', input.unit+" to Bitcoin/USD$");
+	$('#etherHelp').attr('title', input.value + " " + input.unit+" to ether denominations");
+	$('#btcHelp').attr('title', input.value + " " + input.unit+" to Bitcoin/USD$");
 	$('.etherHelp').tooltip('destroy');
 	$('.etherHelp').tooltip({placement:'top'});
 	
@@ -140,7 +141,6 @@ function convert(input) {
 		$("#out-usd input").val(input['value']);
 		$("#out-usd").addClass("has-success");
 
-		
 	} else {
 		
 	}	
