@@ -140,6 +140,7 @@ function convert(input) {
 		
 		$("#out-usd input").val(input['value']);
 		$("#out-usd").addClass("has-success");
+		
 
 	} else {
 		
