@@ -1,8 +1,8 @@
 /*
 - ether.converter.js v0.1
 - Convert between different denominations of Ether, BTC, and USD$.
-- for http://ether.fund/tool/converter
-- by @jrbedard
+- http://ether.fund/tool/converter
+- (c) 2014 - J.R. Bédard - jrbedard.com
 */
 
 
