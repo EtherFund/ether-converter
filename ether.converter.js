@@ -17,7 +17,7 @@ $(function () {
 		setEtherInput('value', 1, 'ether'); // default input
 	}
 	
-	$("#input-value").focus();
+	$("#input-value").selectRange(-1); // focus
 	
 	// Get Bitcoin price
 	getBTCprice( function(btcprice) {
@@ -42,7 +42,8 @@ $("#input-value").bind("change paste keyup", function() {
 // Selected unit
 $("#dropdown-value li a").click(function() {
 	setEtherInput('value', null, $(this).text()); // todo: use val, not text...
-	$("#input-value").focus();
+	
+	$("#input-value").selectRange(-1); // focus
 	$('#go-btn').click(); return false;
 });
 
