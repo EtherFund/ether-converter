@@ -1,6 +1,6 @@
 /*
 - ether.converter.js v0.1
-- Convert between different denominations of Ether, BTC, and USD$.
+- Convert between different denominations of Ether, BTC, and USD$ on Ethereum.
 - http://ether.fund/tool/converter
 - (c) 2014 - J.R. Bédard - jrbedard.com
 */
@@ -71,7 +71,6 @@ function validate() {
 	if(!input) {
 		return input;
 	}
-	//toggleCommas(true);
 	
 	input['value']['hash'] = ['v','u'];
 	//console.log(input);
@@ -107,7 +106,7 @@ function convert(input) {
 		output = convertBTC({'value':btc, 'unit':"BTC"}, null);
 		fillInputs(output);
 		
-		$("#out-usd input").val(btc.times(btcprice).noExponents());
+		$("#out-usd input").val(btc.times(gBtcPrice).noExponents());
 		$("#out-"+input.unit).addClass("has-success");
 	
 	
@@ -123,7 +122,7 @@ function convert(input) {
 		output = convertEther({'value':ether, 'unit':"ether"}, null);
 		fillInputs(output);
 		
-		$("#out-usd input").val(btc.times(btcprice).noExponents());
+		$("#out-usd input").val(btc.times(gBtcPrice).noExponents());
 		$("#out-"+input.unit).addClass("has-success");
 	
 	
@@ -131,7 +130,7 @@ function convert(input) {
 	// else if input is USD$:
 	} else if(input.unit == "USD") {
 		
-		var output = convertBTC({'value':new BigNumber(input['value']).dividedBy(btcprice), 'unit':"BTC"}, null);
+		var output = convertBTC({'value':new BigNumber(input['value']).dividedBy(gBtcPrice), 'unit':"BTC"}, null);
 		fillInputs(output);
 		
 		var btc = output['BTC'];
