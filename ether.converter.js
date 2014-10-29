@@ -2,16 +2,14 @@
 - ether.converter.js v0.1
 - Convert between different denominations of Ether, BTC, and USD$ on Ethereum.
 - http://ether.fund/tool/converter
-- (c) 2014 - J.R. Bédard - jrbedard.com
+- (c) 2014 J.R. Bédard (jrbedard.com)
 */
-
 
 
 // Init
 $(function () {
-	var hash = document.location.hash;
-	if(hash) {
-		var params = getHashParams();
+	var params = getHashParams();
+	if(params) {
 		setEtherInput('value', params['v'], params['u']); // from URL hash
 	} else {
 		setEtherInput('value', 1, 'ether'); // default input
@@ -86,11 +84,11 @@ function convert(input) {
 	//console.log(input);
 	var input = input['value'];
 	
-	$(".in-value").html(input.value);
-	$(".in-unit").html(input.unit+" =");
+	$(".in-value").html(" "+input.value);
+	$(".in-unit").html(" "+input.unit+" =");
 	$(".input-group").removeClass("has-success");
 	
-	$('#etherHelp').attr('title', input.value + " " + input.unit+" to ether denominations");
+	$('#etherHelp').attr('title', input.value+" "+input.unit+" to ether denominations");
 	$('#btcHelp').attr('title', input.value + " " + input.unit+" to Bitcoin/USD$");
 	$('.etherHelp').tooltip('destroy');
 	$('.etherHelp').tooltip({placement:'top'});
