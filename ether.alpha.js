@@ -40,7 +40,7 @@ const ETH_LANGUAGES = {
 		'desc':"Serpent is designed to be very similar to Python.",
 		'specs':"https://github.com/ethereum/wiki/wiki/Serpent",
 	},
-	'Solidity':{'name':"Solidity", 'syntax':"C++", 'ext':"so", 'mode':"ace/mode/c_cpp",
+	'Solidity':{'name':"Solidity", 'syntax':"C++", 'ext':"so", 'mode':"ace/mode/java",
 		'desc':"The Solidity programming language.",
 		'specs':"",
 	},
@@ -77,7 +77,7 @@ const ICON_STATES = {
 
 
 BigNumber.config({ERRORS: false}); // ignore the 15digits limit
-
+BigNumber.config({EXPONENTIAL_AT: 1e+9});
 
 const ETHERFACE_KEY = '111'; // Our Etherface Key
 

@@ -114,6 +114,8 @@ function validateEtherInput(ids) {
 }
 
 
+// http://mikemcl.github.io/bignumber.js/
+
 // no scientific notation: 1e3 -> 1000
 BigNumber.prototype.noExponents = function(){
 	var data= String(this).split(/[eE]/);
@@ -133,21 +135,15 @@ BigNumber.prototype.noExponents = function(){
 	return str + z;
 }
 
-// add english commas to numbers
-Number.prototype.withCommas = function() {
-	return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+// add commas to numbers
+BigNumber.prototype.withCommas = function() {
+	var parts=this.toString().split(".");
+    return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
 }
 
-function toggleCommas(show) {
-	if(show) {
-		$("input").each(function(index) {
-			var val = $(this).val();
-			if(val && val != "" && !isNaN(val)) {
-				console.log(val);
-				$(this).val( parseFloat(val).withCommas() );
-			}
-		});
-	}
+// Display as exponent
+BigNumber.prototype.asExponent = function() {
+	return this.toExponential();
 }
 
 

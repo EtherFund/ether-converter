@@ -5,6 +5,8 @@
 - (c) 2014 J.R. Bédard (jrbedard.com)
 */
 
+var gNum='numeric'; //'commas','exponents' 
+
 
 // Init
 $(function () {
@@ -61,6 +63,15 @@ $("#go-btn").click(function() {
 	}
 });
 
+// Display number
+$("#displayNumber button").click(function() {
+	gNum = $(this).data('name');
+	$("#displayNumber button").removeClass('active');
+	$(this).addClass('active');
+	$('#go-btn').click(); return false;
+});
+
+
 
 
 // Validate
@@ -97,56 +108,60 @@ function convert(input) {
 	// if input is an ETH unit:
 	if(input.unit in ETH_UNITS) {
 		
+		$("#out-"+input.unit).addClass("has-success");
 		var output = convertEther(input, null);
-		fillInputs(output);
+		fillResults(output);
 		
 		var btc = new BigNumber(output['ether']).dividedBy(SALE_PRICE);
 		output = convertBTC({'value':btc, 'unit':"BTC"}, null);
-		fillInputs(output);
+		output['usd'] = btc.times(gBtcPrice);
 		
-		$("#out-usd input").val(btc.times(gBtcPrice).noExponents());
-		$("#out-"+input.unit).addClass("has-success");
-	
-	
+		fillResults(output);
+		
 	
 	// else if input is a BTC unit:
 	} else if(input.unit in BTC_UNITS) {
 		
+		$("#out-"+input.unit).addClass("has-success");
 		var output = convertBTC(input, null);
-		fillInputs(output);
+		fillResults(output);
 		
 		var btc = new BigNumber(output['BTC']);
 		var ether = btc.times(SALE_PRICE);
 		output = convertEther({'value':ether, 'unit':"ether"}, null);
-		fillInputs(output);
+		output['usd'] = btc.times(gBtcPrice);
 		
-		$("#out-usd input").val(btc.times(gBtcPrice).noExponents());
-		$("#out-"+input.unit).addClass("has-success");
-	
+		fillResults(output);
 	
 	
 	// else if input is USD$:
 	} else if(input.unit == "USD") {
 		
+		$("#out-usd").addClass("has-success");
 		var output = convertBTC({'value':new BigNumber(input['value']).dividedBy(gBtcPrice), 'unit':"BTC"}, null);
-		fillInputs(output);
+		fillResults(output);
 		
 		var btc = output['BTC'];
 		var ether = new BigNumber(btc).times(SALE_PRICE);
 		output = convertEther({'value':ether, 'unit':"ether"}, null);
-		fillInputs(output);
+		output['usd'] = input['value'];
 		
-		$("#out-usd input").val(input['value']);
-		$("#out-usd").addClass("has-success");
+		fillResults(output);
+		
 	} else {
 		
-	}	
+	}
 }
 
 
-// fill input fields
-function fillInputs(object) {
+// fill results fields
+function fillResults(object) {
 	$.each(object, function(unit, value) {
+		if(gNum == 'commas') {
+			value = BigNumber(value).withCommas();
+		} else if(gNum == 'exponents') {
+			value = BigNumber(value).asExponent();
+		}
 		$("#out-"+unit+" input").val(value);
 	});	
 }
