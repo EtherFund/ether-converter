@@ -5,7 +5,7 @@
 - (c) 2014 J.R. Bédard (jrbedard.com)
 */
 
-var gNum='numeric'; //'commas','exponents' 
+var gDisplay='numeric'; //'commas','exponents'
 
 
 // Init
@@ -63,9 +63,9 @@ $("#go-btn").click(function() {
 	}
 });
 
-// Display number
+// Display numeric options
 $("#displayNumber button").click(function() {
-	gNum = $(this).data('name');
+	gDisplay = $(this).data('name');
 	$("#displayNumber button").removeClass('active');
 	$(this).addClass('active');
 	$('#go-btn').click(); return false;
@@ -157,9 +157,9 @@ function convert(input) {
 // fill results fields
 function fillResults(object) {
 	$.each(object, function(unit, value) {
-		if(gNum == 'commas') {
+		if(gDisplay == 'commas') {
 			value = BigNumber(value).withCommas();
-		} else if(gNum == 'exponents') {
+		} else if(gDisplay == 'exponents') {
 			value = BigNumber(value).asExponent();
 		}
 		$("#out-"+unit+" input").val(value);
